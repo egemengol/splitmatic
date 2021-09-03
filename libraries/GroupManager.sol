@@ -31,4 +31,12 @@ library GroupManager {
     {
         return group.existances[nickname];
     }
+
+    function getBalance(Group storage group, bytes32 nickname)
+        internal
+        view
+        returns (int256)
+    {
+        return group.accounts[nickname].balance;
+    }
 }

@@ -30,4 +30,8 @@ contract Splitmatic {
     function getAllNicknames() public view returns (bytes32[] memory) {
         return group.nicknames;
     }
+
+    function getBalance(bytes32 nickname) public view returns(int256) {
+        return GroupManager.getBalance(group, nickname);
+    }
 }
