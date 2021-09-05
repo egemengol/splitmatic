@@ -4,13 +4,14 @@ pragma solidity ^0.8.0;
 library GroupManager {
     struct Account {
         bytes32 nickname;
-        int256 balance;
+        uint256 debt;
+        uint256 owed;
     }
 
     struct Group {
+        address[] addresses;
         mapping(address => Account) accounts;
         mapping(bytes32 => address) nick2Addr;
-        bytes32[] nicknames;
     }
 
     function add(
@@ -21,9 +22,9 @@ library GroupManager {
         require(nickname != bytes32(0));
         require(!GroupManager.exists(group, addr));
         
-        group.nick2Addr[nickname] = addr;
+        group.addresses.push(addr);
         group.accounts[addr].nickname = nickname;
-        group.nicknames.push(nickname);
+        group.nick2Addr[nickname] = addr;
     }
 
     function exists(Group storage group, address addr)
@@ -37,8 +38,19 @@ library GroupManager {
     function getBalance(Group storage group, address addr)
         internal
         view
-        returns (int256)
+        returns (uint256, uint256)
     {
-        return group.accounts[addr].balance;
+        return (group.accounts[addr].owed, group.accounts[addr].debt);
+    }
+
+    function spend(Group storage group, address spender, uint256[] calldata charges) internal returns(uint256) {
+        require(charges.length == group.addresses.length, "Array lengths do not match!");
+        uint owed;
+        for (uint i=0; i<charges.length; i++) {
+            owed += charges[i];
+            group.accounts[group.addresses[i]].debt += charges[i];
+        }
+        group.accounts[spender].owed += owed;
+        return owed;
     }
 }

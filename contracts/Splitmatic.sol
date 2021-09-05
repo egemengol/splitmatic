@@ -1,13 +1,16 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import "../libraries/GroupManager.sol";
 
 contract Splitmatic {
     GroupManager.Group group;
+    IERC20 token;
 
-    constructor(address[] memory addresses, bytes32[] memory nicknames) {
+    constructor(address tokenAddress, address[] memory addresses, bytes32[] memory nicknames) {
         addParticipants(addresses, nicknames);
+        token = IERC20(tokenAddress);
     }
 
     function addParticipants(
@@ -27,11 +30,12 @@ contract Splitmatic {
         return GroupManager.exists(group, addr);
     }
 
-    function getAllNicknames() public view returns (bytes32[] memory) {
-        return group.nicknames;
+    function balanceOf(address addr) public view returns(uint256, uint256) {
+        return GroupManager.getBalance(group, addr);
     }
 
-    function getBalance(address addr) public view returns(int256) {
-        return GroupManager.getBalance(group, addr);
+    function spend(address recipient, uint256[] calldata charges) public {
+        uint amount = GroupManager.spend(group, msg.sender, charges);
+        token.transferFrom(msg.sender, recipient, amount);
     }
 }
