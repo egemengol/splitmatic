@@ -26,19 +26,19 @@ describe('Balance Management', function () {
 		]);
 
 		const splitmaticFactory = await ethers.getContractFactory('Splitmatic');
-		splitmatic = await splitmaticFactory.deploy([nick(A)], [A.address]);
-		await splitmatic.addParticipants([nick(B), nick(C)], [B.address, C.address]);
+		splitmatic = await splitmaticFactory.deploy([A.address], [nick(A)]);
+		await splitmatic.addParticipants([B.address, C.address], [nick(B), nick(C)]);
 	});
 
 	it('check starting state', async () => {
-		expect(await splitmatic.isParticipant(nick(A))).to.be.true;
-		expect(await splitmatic.isParticipant(nick(C))).to.be.true;
-		expect(await splitmatic.isParticipant(nick(B))).to.be.true;
-		expect(await splitmatic.isParticipant(nick(D))).to.be.false;
+		expect(await splitmatic.isParticipant(A.address)).to.be.true;
+		expect(await splitmatic.isParticipant(B.address)).to.be.true;
+		expect(await splitmatic.isParticipant(C.address)).to.be.true;
+		expect(await splitmatic.isParticipant(D.address)).to.be.false;
 
-		expect(await splitmatic.getBalance(nick(A))).to.equal(0);
-		expect(await splitmatic.getBalance(nick(B))).to.equal(0);
-		expect(await splitmatic.getBalance(nick(C))).to.equal(0);
-		expect(await splitmatic.getBalance(nick(D))).to.equal(0);
+		expect(await splitmatic.getBalance(A.address)).to.equal(0);
+		expect(await splitmatic.getBalance(B.address)).to.equal(0);
+		expect(await splitmatic.getBalance(C.address)).to.equal(0);
+		expect(await splitmatic.getBalance(D.address)).to.equal(0);
 	});
 });

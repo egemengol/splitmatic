@@ -3,40 +3,42 @@ pragma solidity ^0.8.0;
 
 library GroupManager {
     struct Account {
-        address addr;
+        bytes32 nickname;
         int256 balance;
     }
 
     struct Group {
+        mapping(address => Account) accounts;
+        mapping(bytes32 => address) nick2Addr;
         bytes32[] nicknames;
-        mapping(bytes32 => Account) accounts;
-        mapping(bytes32 => bool) existances;
     }
 
     function add(
         Group storage group,
-        bytes32 nickname,
-        address addr
+        address addr,
+        bytes32 nickname
     ) internal {
-        require(!group.existances[nickname]);
+        require(nickname != bytes32(0));
+        require(!GroupManager.exists(group, addr));
+        
+        group.nick2Addr[nickname] = addr;
+        group.accounts[addr].nickname = nickname;
         group.nicknames.push(nickname);
-        group.accounts[nickname].addr = addr;
-        group.existances[nickname] = true;
     }
 
-    function exists(Group storage group, bytes32 nickname)
+    function exists(Group storage group, address addr)
         internal
         view
         returns (bool)
     {
-        return group.existances[nickname];
+        return group.accounts[addr].nickname != bytes32(0);
     }
 
-    function getBalance(Group storage group, bytes32 nickname)
+    function getBalance(Group storage group, address addr)
         internal
         view
         returns (int256)
     {
-        return group.accounts[nickname].balance;
+        return group.accounts[addr].balance;
     }
 }

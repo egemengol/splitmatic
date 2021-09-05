@@ -16,34 +16,34 @@ describe('Participant Management', function () {
 		[deployer, ...accounts] = await ethers.getSigners();
 
 		const splitmaticFactory = await ethers.getContractFactory('Splitmatic');
-		splitmatic = await splitmaticFactory.deploy([deployerNick], [deployer.address]);
+		splitmatic = await splitmaticFactory.deploy([deployer.address], [deployerNick]);
 	});
 
 	it('child should have one participant', async function () {
-		expect(await splitmatic.isParticipant(deployerNick));
-		expect(!(await splitmatic.isParticipant(accountNick(0))));
+		expect(await splitmatic.isParticipant(deployer.address));
+		expect(!(await splitmatic.isParticipant(accounts[0].address)));
 	});
 
 	it('can add participants later', async function () {
-		expect(await splitmatic.isParticipant(deployerNick));
-		expect(!(await splitmatic.isParticipant(accountNick(0))));
-		expect(!(await splitmatic.isParticipant(accountNick(1))));
-		expect(!(await splitmatic.isParticipant(accountNick(2))));
+		expect(await splitmatic.isParticipant(deployer.address));
+		expect(!(await splitmatic.isParticipant(accounts[0].address)));
+		expect(!(await splitmatic.isParticipant(accounts[1].address)));
+		expect(!(await splitmatic.isParticipant(accounts[2].address)));
 
-		await splitmatic.addParticipants([accountNick(0), accountNick(1)], [accounts[0].address, accounts[1].address]);
+		await splitmatic.addParticipants([accounts[0].address, accounts[1].address], [accountNick(0), accountNick(1)]);
 
-		expect(await splitmatic.isParticipant(deployerNick));
-		expect(await splitmatic.isParticipant(accountNick(0)));
-		expect(await splitmatic.isParticipant(accountNick(1)));
-		expect(!(await splitmatic.isParticipant(accountNick(2))));
+		expect(await splitmatic.isParticipant(deployer.address));
+		expect(await splitmatic.isParticipant(accounts[0].address));
+		expect(await splitmatic.isParticipant(accounts[1].address));
+		expect(!(await splitmatic.isParticipant(accounts[2].address)));
 	});
 
 	it('requires both nickname and address', async function () {
-		await expect(splitmatic.addParticipants([accountNick(0), accountNick(1)], [accounts[0].address])).to.be.revertedWith('Array lengths do not match!');
+		await expect(splitmatic.addParticipants([accounts[0].address], [accountNick(0), accountNick(1)])).to.be.revertedWith('Array lengths do not match!');
 	});
 
 	it('can get nicknames', async function () {
-		await splitmatic.addParticipants([accountNick(0), accountNick(1)], [accounts[0].address, accounts[1].address]);
+		await splitmatic.addParticipants([accounts[0].address, accounts[1].address], [accountNick(0), accountNick(1)]);
 
 		const gotNicknames = await splitmatic.getAllNicknames();
 		expect(gotNicknames).to.eql([deployerNick, accountNick(0), accountNick(1)]);
