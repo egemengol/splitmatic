@@ -38,4 +38,16 @@ contract Splitmatic {
         uint amount = GroupManager.spend(group, msg.sender, charges);
         token.transferFrom(msg.sender, recipient, amount);
     }
+
+    function settle() public {
+        uint256 contractBalance = token.balanceOf(address(this));
+        (uint256 amount, bool outBound) = GroupManager.settle(group, contractBalance, msg.sender);
+        if (amount != 0) {
+            if (outBound) {
+                token.transfer(msg.sender, amount);
+            } else {
+                token.transferFrom(msg.sender, address(this), amount);
+            }
+        }
+    }
 }

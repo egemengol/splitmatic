@@ -53,4 +53,24 @@ library GroupManager {
         group.accounts[spender].owed += owed;
         return owed;
     }
+
+    function settle(Group storage group, uint256 contractBalance, address caller) internal returns(uint256, bool) {
+        // Returns: (amount, isOutbound)
+        (uint256 owed, uint256 debt) = GroupManager.getBalance(group, caller);
+        if (debt > owed) {
+            group.accounts[msg.sender].debt = 0;
+            group.accounts[msg.sender].owed = 0;
+            return (debt - owed, false);
+        } else if (owed > debt) {
+            uint256 willReceive = owed - debt;
+            if (willReceive > contractBalance) {
+                willReceive = contractBalance; 
+            }
+            group.accounts[msg.sender].owed -= willReceive + debt;
+            group.accounts[msg.sender].debt = 0;
+            return (willReceive, true);
+        } else {
+            return (0, true);
+        }
+    }
 }
