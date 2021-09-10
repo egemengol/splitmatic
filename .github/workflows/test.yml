@@ -17,6 +17,7 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: '14'
-          cache: 'npm'
+          cache: 'yarn'
       - run: yarn
+      - run: npx hardhat compile
       - run: npx hardhat test
