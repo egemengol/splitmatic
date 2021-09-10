@@ -11,7 +11,6 @@ library GroupManager {
     struct Group {
         address[] addresses;
         mapping(address => Account) accounts;
-        mapping(bytes32 => address) nick2Addr;
     }
 
     function add(
@@ -24,7 +23,6 @@ library GroupManager {
         
         group.addresses.push(addr);
         group.accounts[addr].nickname = nickname;
-        group.nick2Addr[nickname] = addr;
     }
 
     function exists(Group storage group, address addr)

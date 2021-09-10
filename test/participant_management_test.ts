@@ -19,7 +19,7 @@ describe('Participant Management', function () {
 		splitmatic = await splitmaticFactory.deploy(ethers.constants.AddressZero, [deployer.address], [deployerNick]);
 	});
 
-	it('child should have one participant', async function () {
+	it('contract should have one participant', async function () {
 		expect(await splitmatic.isParticipant(deployer.address));
 		expect(!(await splitmatic.isParticipant(accounts[0].address)));
 	});
