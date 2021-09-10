@@ -76,9 +76,6 @@ describe('Access', function () {
 		expect(await token.balanceOf(B.address)).to.equal(BigNumber.from(1000 - 30));
 		expect(await splitmatic.balanceOf(B.address)).to.eql([BigNumber.from(30), BigNumber.from(20)], "splitmatic balance");
 
-        console.log("token balance A: ", await token.balanceOf(A.address));
-        console.log("splitmatic balance A: ", await splitmatic.balanceOf(A.address));
-
         await splitmatic.connect(A).settle();
         await splitmatic.connect(B).settle();        
         expect(await token.balanceOf(B.address)).to.equal(BigNumber.from(1000 - 30 + 10), "token balance");
