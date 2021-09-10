@@ -44,7 +44,7 @@ library GroupManager {
     }
 
     function spend(Group storage group, address spender, uint256[] calldata charges) internal returns(uint256) {
-        require(charges.length == group.addresses.length, "Array lengths do not match!");
+        require(charges.length == group.addresses.length, "Nof charges do not match nof participants!");
         uint owed;
         for (uint i=0; i<charges.length; i++) {
             owed += charges[i];
