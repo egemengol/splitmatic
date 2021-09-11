@@ -1,14 +1,14 @@
 # Splitmatic
 
 Splitmatic is a port of Splitwise, in solidity.  
-It does not try to be feature complete for this version, it is intended to be a learning project.
+It is intended to be a learning project, does not try to be feature complete.
 
 It includes:
 - A Solidity library for core logic
 - Access control (therefore separation of concerns)
 - Utilization of `approve` function from ERC20.
 - Tests, written in Typescript
-- A Github action for tests: ![test results](https://github.com/egemengol/splitmatic/actions/workflows/commit.yml/badge.svg)
+- A Github action for tests:  ![test results](https://github.com/egemengol/splitmatic/actions/workflows/commit.yml/badge.svg)
 
 ## Features
 - Participants can be added to the group by other participants anytime.
@@ -16,11 +16,11 @@ It includes:
 - Payments are done with a ERC20 token, which is determined on contract creation.
 
 ## Usage
-Participants enter any spending by supplying an array of charges, which represents the actual value every participant received from the spending.  
+- Participants enter any spending by supplying an array of charges, which represents the actual value every participant received from the spending.  
 
-If an actor with more debt than expenditure decides to settle, the difference is transferred to the contract.
+- If an actor with more debt than expenditure decides to settle, the difference is transferred to the contract.
 
-If an actor with more expenditure than debt decides to settle, the amount is transferred from contract to that actor's account. If the funds are insufficient, the actor gets whatever they can, with the remaining due amount is still in effect.
+- If an actor with more expenditure than debt decides to settle, the amount is transferred from contract to that actor's account. If the funds are insufficient, the actor gets whatever they can, with the remaining due amount is still in effect.
 
 For an example, you can check [*this document*](./EXAMPLE.md) out.
 
@@ -32,7 +32,7 @@ For an example, you can check [*this document*](./EXAMPLE.md) out.
 
 ```bash
 yarn
-npx hardhat 
+npx hardhat test
 ```
 
 ## License
